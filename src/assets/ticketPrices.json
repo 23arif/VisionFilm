@@ -1,0 +1,14 @@
+[
+  {
+    "price": "10.00",
+    "label": "Normal"
+  },
+  {
+    "price": "8.00",
+    "label": "Student"
+  },
+  {
+    "price": "5.00",
+    "label": "Kid"
+  }
+]
