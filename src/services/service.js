@@ -16,4 +16,8 @@ export default {
     return firebase.database().ref(`/movieTimes/${id}`).once('value');
   },
 
+  fetchTicketPrices(){
+    return firebase.database().ref('/ticketPrices').once('value');
+  }
+
 }

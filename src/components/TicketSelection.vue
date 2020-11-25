@@ -16,31 +16,75 @@
     created() {
       this.$store.dispatch('fetchMovieDetails', this.movieId).then(() => {
         this.$store.dispatch('fetchMovieTimes', this.movieId).then(() => {
-          this.isLoading = false;
-          this.hasTicketingInfo = true
-        })
+          this.$store.dispatch('fetchTicketPrices').then(() => {
+            this.isLoading = false;
+            this.hasTicketingInfo = true;
+            this.setTicketTypes()
+          })
+        });
       });
     },
     computed: {
       movieId() {
         return this.$route.params.id;
       },
-      getEnv(){
-        console.log(process.env.VUE_APP_TITLE)
-      }
+      ticketPrices() {
+        return this.$store.state.ticketPrice
+      },
+      seatSelectionPath() {
+        return `/movie/${this.movieId}/seat-selection`;
+      },
+      isTimeAndTicketCountSelected() {
+        let selected = false;
 
+        for (const key in this.selectedTickets) {
+          if (this.selectedTickets[key] > 0) {
+            selected = true;
+          }
+        }
+
+        return selected && this.selectedTime;
+      },
     },
     methods: {
       movie() {
         return this.$store.state.movieDetails[this.movieId];
-      },
+      }
+      ,
       movieTimes() {
         return this.$store.state.movieTime[this.movieId];
-      },
+      }
+      ,
       selectTime(time) {
         this.selectedTime = time;
       }
-    },
+      ,
+      addTicket(type) {
+        this.selectedTickets[type] = ++this.selectedTickets[type]
+      }
+      ,
+      removeTicket(type) {
+        this.selectedTickets[type] = Math.max(--this.selectedTickets[type], 0);
+      }
+      ,
+      setTicketTypes() {
+        const types = {};
+
+        this.ticketPrices.forEach((ticket) => {
+          types[ticket.label] = 0;
+        });
+
+        this.selectedTickets = types;
+      }
+      ,
+      navigateToSeatSelection(){
+        this.$store.commit('setSelectedTime', this.selectedTime);
+        this.$store.commit('setSelectedTicketOptions', this.selectedTickets);
+        this.$store.commit('setSelectedMovieHallId', this.movieTimes().hallId);
+        this.$router.push(this.seatSelectionPath);
+      }
+    }
+    ,
     components: {
       BackdropImage, Loader, Poster
     }
@@ -70,29 +114,29 @@
                   {{time}}
                 </p>
               </div>
-<!--              <div class="ticket-types">-->
-<!--                <div v-for="ticket in ticketPrices">-->
-<!--                  <p-->
-<!--                    @click="removeTicket(ticket.label)"-->
-<!--                    :class="{ disabled: !selectedTickets[ticket.label]}">-</p>-->
-<!--                  <div class="text">-->
-<!--                    <span class="label">-->
-<!--                      <span class="count" v-if="selectedTickets[ticket.label] > 0">-->
-<!--                         {{selectedTickets[ticket.label]}}-->
-<!--                      </span>-->
-<!--                      {{ticket.label}}-->
-<!--                    </span>-->
-<!--                    <span class="price">{{parseInt(ticket.price, 10).toFixed(2)}} TL</span>-->
-<!--                  </div>-->
-<!--                  <p @click="addTicket(ticket.label)">+</p>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <button-->
-<!--                @click="navigateToSeatSelection"-->
-<!--                :disabled="!isTimeAndTicketCountSelected"-->
-<!--                type="button"-->
-<!--                class="btn btn-success">Select Your Seat-->
-<!--              </button>-->
+              <div class="ticket-types">
+                <div v-for="ticket in ticketPrices">
+                  <p
+                    @click="removeTicket(ticket.label)"
+                    :class="{ disabled: !selectedTickets[ticket.label]}">-</p>
+                  <div class="text">
+                    <span class="label">
+                      <span class="count" v-if="selectedTickets[ticket.label] > 0">
+                        {{selectedTickets[ticket.label]}}
+                      </span>
+                      {{ticket.label}}
+                    </span>
+                    <span class="price">{{parseInt(ticket.price, 10).toFixed(2)}} $</span>
+                  </div>
+                  <p @click="addTicket(ticket.label)">+</p>
+                </div>
+              </div>
+              <button
+                @click="navigateToSeatSelection"
+                :disabled="!isTimeAndTicketCountSelected"
+                type="button"
+                class="btn btn-success">Select Your Seat
+              </button>
             </div>
           </div>
         </div>

@@ -6,6 +6,11 @@ const state = {
   movieCast: [],
   movieTrailer: [],
   movieTime: {},
+  ticketPrice: [],
+  selectedTime: null,
+  selectedTicketCounts: null,
+  selectedMovieHallId: null,
+
 };
 const getters = {
   movies() {
@@ -37,10 +42,23 @@ const mutations = {
     state.movieTrailer = trailerData;
   },
   setMovieTimes(state, data) {
-    const {id,times}  = data;
+    const {id, times} = data;
     state.movieTime[id] = times;
-  }
-};
+  },
+  setTicketPrices(state, price) {
+    state.ticketPrice = price;
+  },
+  setSelectedTime(state, time) {
+    state.selectedTime = time;
+  },
+  setSelectedTicketOptions(state, tickets) {
+    state.selectedTicketCounts = tickets;
+  },
+  setSelectedMovieHallId(state, id) {
+    // state.selectedMovieHallId = id;
+    return id;
+  },
+}
 const actions = {
   fetchMovies(context) {
     return service.fetchMovies().then((snapshot) => {
@@ -91,6 +109,12 @@ const actions = {
       context.commit('setMovieTimes', {id, times: snapshot.val()});
     });
   },
+
+  fetchTicketPrices(context) {
+    return service.fetchTicketPrices().then((snapshot) => {
+      context.commit('setTicketPrices', snapshot.val())
+    })
+  }
 };
 
 export default {

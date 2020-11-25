@@ -1,7 +1,7 @@
 {
   "name": "vision-film",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "A VisionFilm SPA APP",
   "author": "23arif <arifaov@outlook.com>",
   "private": true,
   "scripts": {
@@ -12,7 +12,8 @@
   "dependencies": {
     "module": "^1.2.5",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
