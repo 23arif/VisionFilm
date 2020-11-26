@@ -16,7 +16,6 @@
     },
     computed: {
       ...mapGetters([
-        'movies',
         'groupMovies'
       ])
     },

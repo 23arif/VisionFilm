@@ -2,7 +2,7 @@ import Home from '../components/Home.vue';
 import MovieDetails from "../components/MovieDetails";
 import TicketSelection from "../components/TicketSelection";
 import SeatSelection from "../components/SeatSelection";
-
+import Confirmation from "../components/Confirmation.vue";
 export default {
   routes: [
     {
@@ -21,10 +21,10 @@ export default {
       path: '/movie/:id/seat-selection',
       component: SeatSelection
     },
-    // {
-    //   path: '/confirmation',
-    //   component: Confirmation
-    // }
+    {
+      path: '/confirmation',
+      component: Confirmation
+    },
   ],
   mode: 'history'
 }

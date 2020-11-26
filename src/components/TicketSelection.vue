@@ -14,6 +14,7 @@
       }
     },
     created() {
+      this.$store.commit('setSelectedMovieId', this.movieId);
       this.$store.dispatch('fetchMovieDetails', this.movieId).then(() => {
         this.$store.dispatch('fetchMovieTimes', this.movieId).then(() => {
           this.$store.dispatch('fetchTicketPrices').then(() => {
@@ -146,6 +147,9 @@
 </template>
 
 <style scoped>
+  section{
+    margin-bottom:20px;
+  }
   .details {
     color: #fff
   }

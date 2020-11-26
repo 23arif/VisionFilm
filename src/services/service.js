@@ -18,6 +18,13 @@ export default {
 
   fetchTicketPrices(){
     return firebase.database().ref('/ticketPrices').once('value');
-  }
+  },
 
+  fetchSeating(hallId) {
+    return firebase.database().ref(`/halls/${hallId}`).once('value');
+  },
+
+  fetchSoldTickets({ movieId, time }) {
+    return firebase.database().ref(`/soldTickets/${movieId}/${time}`).once('value');
+  }
 }
